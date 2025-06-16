@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Your to do list</title>
+    <link rel="stylesheet" href="/styles/main.css" />
+  </head>
+  <body><%- include('partials/header.ejs'); -%>
+<div class="box ok" style="text-align: center;">
+  <h1 >Your to do List for a Day,Month &Year</h1>
+  <button><a href="/lists/Today">Today</a> </button>
+ <button><a href="/lists/Month">Month</a> </button> 
+ <button><a href="/lists/Year">Year</a></button> 
+</div>
+
+
+  <div class="box" id="heading">
+    <h1>
+      <%= listTitle %>
+    </h1>
+  </div>
+  <div class="box">
+    <% for(let item of listItems){%>
+      <div class="item">
+       
+        <form action="/delete" method="post">
+  <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+  <input type="hidden" name="listName" value="<%= listTitle %>">
+  <input type="checkbox" onchange="this.form.submit()">
+</form>
+
+
+        <p id="title<%=item.id%>">
+          <%= item.title %>
+        </p>
+
+        
+      <form class="edit" action="/edit" method="post">
+  <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+  <input type="hidden" name="listName" value="<%= listTitle %>">
+  <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off"
+    autofocus="true" hidden="true" />
+  <button id="done<%=item.id%>" class="edit" type="submit" hidden><img class="icon"
+      src="/assets/icons/check-solid.svg" alt="tick image"></button>
+</form>
+<button id="edit<%=item.id%>" class="edit" onclick="handler('<%=item.id%>')"><img class="icon"
+            src="/assets/icons/pencil-solid.svg" alt="pencil image"></button>
+      </div>
+      <% } %>
+
+        <!-- <form class="item" action="/add" method="post">
+          <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+          <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
+        </form> -->
+        <form class="item" action="/add" method="post">
+  <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+  <input type="hidden" name="listName" value="<%= listTitle %>">
+  <button class="add" type="submit">+</button>
+</form>
+
+  </div>
+
+  <script>
+    function handler(id) {
+      document.getElementById("title" + id).setAttribute("hidden", true)
+      document.getElementById("edit" + id).setAttribute("hidden", true)
+      document.getElementById("done" + id).removeAttribute("hidden")
+      document.getElementById("input" + id).removeAttribute("hidden")
+    }
+  </script>
+  <%- include('partials/footer.ejs'); -%>
+  <footer style="text-align: center; padding: 10px; margin-top: 20px; color: #555;">
+    <p>Copyright © <%= new Date().getFullYear() %> Permalist</p>
+    <p><em>Tip:</em> Click the pencil ✏️ icon to edit an item!</p>
+  </footer>
+</body>
+</html>
