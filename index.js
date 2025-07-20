@@ -4,18 +4,19 @@ import pg from "pg";
 const app = express();
 app.set("view engine", "ejs");
 app.set("views", "./views");
+import dotenv from "dotenv";
+dotenv.config();
 
 const port = 4000;
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "goals",
-  password: "Soumajit@123",
-  port: 3000,
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // required by Supabase
 });
+
 db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+console.log("Connected to:", process.env.DATABASE_URL);
 
 let items = [];
 
