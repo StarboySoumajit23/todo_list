@@ -7,7 +7,8 @@ app.set("views", "./views");
 import dotenv from "dotenv";
 dotenv.config();
 
-const port = 4000;
+const port = process.env.PORT || 4000;
+
 const db = new pg.Client({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false } // required by Supabase
